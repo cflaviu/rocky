@@ -121,7 +121,7 @@ namespace ROCKY_NAMESPACE
             virtual int featureMask(const T& t) const { return 0; }
 
             // The configuration and command list for a graphics pipeline
-            // configured for a specific set of features. This setup 
+            // configured for a specific set of features. This setup
             // supports the creation of a unique pipeline for a feature set
             // that's stored in an integer mask.
             struct Pipeline
@@ -227,7 +227,7 @@ namespace ROCKY_NAMESPACE
             //! Update all connected system nodes. This should be invoked once per frame.
             //! @param runtime The runtime object to pass to the systems
             void update(VSGContext& runtime);
-        
+
             std::vector<System*> systems;
             std::vector<std::shared_ptr<System>> non_node_systems;
             Registry& registry;
@@ -340,9 +340,9 @@ namespace ROCKY_NAMESPACE
     {
         auto [lock, registry] = _registry.write();
 
-        registry.on_construct<T>().template connect<&detail::SystemNode_on_construct<T>>();
-        registry.on_update<T>().template connect<&detail::SystemNode_on_update<T>>();
-        registry.on_destroy<T>().template connect<&detail::SystemNode_on_destroy<T>>();
+        registry.template on_construct<T>().template connect<&detail::SystemNode_on_construct<T>>();
+        registry.template on_update<T>().template connect<&detail::SystemNode_on_update<T>>();
+        registry.template on_destroy<T>().template connect<&detail::SystemNode_on_destroy<T>>();
     }
 
     template<class T>
@@ -350,9 +350,9 @@ namespace ROCKY_NAMESPACE
     {
         auto [lock, registry] = _registry.write();
 
-        registry.on_construct<T>().template disconnect<&detail::SystemNode_on_construct<T>>();
-        registry.on_update<T>().template disconnect<&detail::SystemNode_on_update<T>>();
-        registry.on_destroy<T>().template disconnect<&detail::SystemNode_on_destroy<T>>();
+        registry.template on_construct<T>().template disconnect<&detail::SystemNode_on_construct<T>>();
+        registry.template on_update<T>().template disconnect<&detail::SystemNode_on_update<T>>();
+        registry.template on_destroy<T>().template disconnect<&detail::SystemNode_on_destroy<T>>();
     }
 
     template<class T>
@@ -365,9 +365,9 @@ namespace ROCKY_NAMESPACE
 
         auto [lock, registry] = _registry.read();
 
-        registry.view<T>().each([&](auto& c)
+        registry.template view<T>().each([&](auto& c)
             {
-                auto& renderable = registry.get<Renderable>(c.attach_point);
+                auto& renderable = registry.template get<Renderable>(c.attach_point);
                 if (renderable.node)
                     renderable.node->accept(v);
             });
@@ -386,9 +386,9 @@ namespace ROCKY_NAMESPACE
 
         auto [lock, registry] = _registry.read();
 
-        registry.view<T>().each([&](auto& c)
+        registry.template view<T>().each([&](auto& c)
             {
-                auto& renderable = registry.get<Renderable>(c.attach_point);
+                auto& renderable = registry.template get<Renderable>(c.attach_point);
                 if (renderable.node)
                     renderable.node->accept(v);
             });
@@ -410,9 +410,9 @@ namespace ROCKY_NAMESPACE
 
         auto [lock, registry] = _registry.read();
 
-        registry.view<T>().each([&](auto& c)
+        registry.template view<T>().each([&](auto& c)
             {
-                auto& renderable = registry.get<Renderable>(c.attach_point);
+                auto& renderable = registry.template get<Renderable>(c.attach_point);
                 if (renderable.node)
                     renderable.node->accept(vsg_compiler);
             });
@@ -434,13 +434,13 @@ namespace ROCKY_NAMESPACE
         auto [lock, registry] = _registry.read();
 
         // Get an optimized view of all this system's components:
-        registry.view<T, ActiveState, Visibility>().each([&](const entt::entity entity, auto& component, auto& active, auto& visibility)
+        registry.template view<T, ActiveState, Visibility>().each([&](const entt::entity entity, auto& component, auto& active, auto& visibility)
             {
-                auto& renderable = registry.get<Renderable>(component.attach_point);
+                auto& renderable = registry.template get<Renderable>(component.attach_point);
                 if (renderable.node)
                 {
                     auto& leaves = !pipelines.empty() ? pipelineRenderLeaves[featureMask(component)] : pipelineRenderLeaves[0];
-                    auto* transform_detail = registry.try_get<TransformDetail>(entity);
+                    auto* transform_detail = registry.template try_get<TransformDetail>(entity);
 
                     // if it's visible, queue it up for rendering
                     if (visible(visibility, viewID))
@@ -515,8 +515,8 @@ namespace ROCKY_NAMESPACE
                 if (!registry.valid(entity))
                     continue;
 
-                T& component = registry.get<T>(entity);
-                Renderable& renderable = registry.get<Renderable>(component.attach_point);
+                T& component = registry.template get<T>(entity);
+                Renderable& renderable = registry.template get<Renderable>(component.attach_point);
 
                 // either the node doesn't exist yet, or the revision changed.
                 // Queue it up for creation.
