@@ -28,7 +28,7 @@ namespace ROCKY_NAMESPACE
         //! One time setup of the system
         void initialize(VSGContext&) override;
 
-        void createOrUpdateNode(Label&, ecs::BuildInfo&, VSGContext&) const;
+        void createOrUpdateNode(Label&, ecs::BuildInfo&, VSGContext&) const override;
 
     };
 }

@@ -143,7 +143,7 @@ MapManipulator::put(vsg::ref_ptr<vsg::Object> object)
 
 vsg::ref_ptr<MapManipulator>
 MapManipulator::get(vsg::ref_ptr<vsg::Object> object)
-{   
+{
     if (object)
         return object->getRefObject<MapManipulator>("rocky.mapmanipulator");
     else
@@ -189,7 +189,7 @@ MapManipulator::Action::getBoolOption(int option, bool defaultValue) const
     for (auto& i : _options)
         if (i.option == option)
             return i.boolValue;
-    
+
     return defaultValue;
 }
 
@@ -626,7 +626,7 @@ MapManipulator::setViewpoint(const Viewpoint& vp)
 
 void
 MapManipulator::setViewpoint(const Viewpoint& vp, std::chrono::duration<float> duration_seconds)
-{    
+{
 #if 0
     // Save any existing tether node so we can properly invoke the callback.
     osg::ref_ptr<vsg::Node> oldEndNode;
@@ -1303,7 +1303,7 @@ MapManipulator::recalculateCenterFromLookVector()
     vsg::LookAt lookat;
     lookat.set(camera->viewMatrix->inverse());
     auto look = vsg::normalize(lookat.center - lookat.eye);
-    
+
     bool ok = false;
     vsg::dvec3 intersection;
 
@@ -1525,7 +1525,7 @@ namespace
         double omega, cosomega, sinomega, scale_from, scale_to;
 
         Q quatTo(to);
-        
+
         // this is a dot product
         glm::dvec4 a(from[0], from[1], from[2], from[3]);
         glm::dvec4 b(to[0], to[1], to[2], to[3]);
@@ -1590,7 +1590,7 @@ MapManipulator::zoom(double dx, double dy)
             if (_worldSRS.isGeocentric())
             {
                 // xform target point into the current focal point's local frame,
-                // and adjust the zoom ratio to account for the difference in 
+                // and adjust the zoom ratio to account for the difference in
                 // target distance based on the earth's curvature...approximately!
                 vsg::dvec3 targetInLocalFrame = vsg::inverse(_state.centerRotation) * target;
                 double crRatio = vsg::length(_state.center) / targetInLocalFrame.z;
@@ -1674,7 +1674,7 @@ MapManipulator::handleMovementAction(const ActionType& type, vsg::dvec2 d)
 
 bool
 MapManipulator::handlePointAction(
-    const Action& action, 
+    const Action& action,
     float mx, float my,
     vsg::time_point time)
 {
@@ -1977,7 +1977,7 @@ MapManipulator::withinRenderArea(const vsg::PointerEvent& pointerEvent) const
     auto renderArea = camera->getRenderArea();
 
     return
-        pointerEvent.x >= renderArea.offset.x && 
+        pointerEvent.x >= renderArea.offset.x &&
         pointerEvent.x < static_cast<int32_t>(renderArea.offset.x + renderArea.extent.width) &&
         pointerEvent.y >= renderArea.offset.y &&
         pointerEvent.y < static_cast<int32_t>(renderArea.offset.y + renderArea.extent.height);
@@ -1990,7 +1990,7 @@ MapManipulator::ndc(const vsg::PointerEvent& event) const
 {
     auto camera = _camera_weakptr.ref_ptr();
     if (!camera)
-        false;
+        return {};
 
     auto renderArea = camera->getRenderArea();
 

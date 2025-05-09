@@ -83,7 +83,7 @@ namespace ROCKY_NAMESPACE
     //! Expands an existing sphere to include a point.
     template<typename vec_type>
     inline void expandBy(vsg::dsphere& bs, const vec_type& v)
-    {        
+    {
         if (bs.valid())
         {
             auto dv = vsg::dvec3(v) - bs.center;
@@ -166,6 +166,8 @@ namespace ROCKY_NAMESPACE
                 break;
             case Image::R64_SFLOAT:
                 return wrap<double>(image, VK_FORMAT_R64_SFLOAT);
+                break;
+            default:
                 break;
             };
 
@@ -251,6 +253,8 @@ namespace ROCKY_NAMESPACE
             case Image::R64_SFLOAT:
                 return move<double>(image, VK_FORMAT_R64_SFLOAT);
                 break;
+            default:
+                break;
             };
 
             return { };
@@ -315,10 +319,10 @@ namespace ROCKY_NAMESPACE
         /**
         * PromiseOperation combines a VSG operation with the Promise/Future construct
         * so that a VSG operation can return a future result.
-        * 
+        *
         * Example: say you want to run something in VSG's update operations queue and
         * get the result when it's done:
-        * 
+        *
         *   auto op = PromiseOperation<bool>::create();
         *   auto result = op->future();
         *   vsg_viewer->updateOperations->add(op);
@@ -401,7 +405,7 @@ namespace ROCKY_NAMESPACE
                 //stateGroup.compile(context);
                 stateGroup.traverse(*this);
             }
-            void apply(vsg::Geometry& geometry) {
+            void apply(vsg::Geometry& geometry) override {
                 geometry.compile(context);
                 geometry.traverse(*this);
             }
