@@ -132,7 +132,7 @@ namespace ROCKY_NAMESPACE
                 return true;
             }
         }
-        
+
         template<typename T>
         inline void applyScaleAndOffset(void* data, int count, double scale, double offset)
         {
@@ -181,6 +181,8 @@ namespace ROCKY_NAMESPACE
                 break;
             case Interpolation::CUBICSPLINE:
                 psExtraArg.eResampleAlg = GRIORA_CubicSpline;
+                break;
+            default:
                 break;
             }
 
@@ -313,7 +315,7 @@ namespace ROCKY_NAMESPACE
                             if (R)
                             {
                                 auto err = R->RasterIO(GF_Read, 0, 0, width, height, result->data<unsigned char>() + (offset++), width, height, GDT_Byte, spacing, 0, nullptr);
-                                ROCKY_SOFT_ASSERT(err == CE_None, ("Error code = " + err) << );
+                                ROCKY_SOFT_ASSERT(err == CE_None, (std::string{"Error code = "} + std::to_string(err)) << );
                             }
 
                             if (G)
@@ -381,7 +383,7 @@ GDAL::Driver::open(
         useExternalDataset = true;
     }
 
-    if (useExternalDataset == false &&        
+    if (useExternalDataset == false &&
         (!layer->uri.has_value() || layer->uri->empty()) &&
         (!layer->connection.has_value() || layer->connection->empty()))
     {
@@ -508,7 +510,7 @@ GDAL::Driver::open(
     bool hasGCP = false;
     bool isRotated = false;
     bool requiresReprojection = false;
-    
+
     bool hasGeoTransform = (_srcDS->GetGeoTransform(_geotransform) == CE_None);
 
     hasGCP = _srcDS->GetGCPCount() > 0 && _srcDS->GetGCPProjection();
@@ -1001,7 +1003,7 @@ GDAL::Driver::createImage(const TileKey& key, unsigned tileSize, const IOOptions
         {
             image = Image::create(Image::R32_SFLOAT, tileSize, tileSize);
             image->fill(glm::fvec4(NO_DATA_VALUE));
-            
+
             if (gdalDataType == GDT_Int16)
             {
                 short* temp = new short[target_width * target_height];
@@ -1051,7 +1053,7 @@ GDAL::Driver::createImage(const TileKey& key, unsigned tileSize, const IOOptions
                 delete[] temp;
             }
         }
-        
+
         else // grey + alpha color
         {
             image = Image::create(Image::R8G8B8A8_UNORM, tileSize, tileSize);
@@ -1115,12 +1117,12 @@ GDAL::Driver::createImage(const TileKey& key, unsigned tileSize, const IOOptions
         memset(image->data<unsigned char>(), 0, image->sizeInBytes());
 
         detail::rasterIO(
-            bandPalette, 
+            bandPalette,
             GF_Read,
             src_min_x, src_min_y, src_width, src_height,
             palette,
             target_width, target_height,
-            GDT_Byte, 0, 0, 
+            GDT_Byte, 0, 0,
             Interpolation::NEAREST);
 
         for (int src_row = 0, dst_row = tile_offset_top;
@@ -1249,7 +1251,7 @@ GDAL::Driver::getInterpolatedDEMValueWorkspace(GDALRasterBand* band, double u, d
         row_min = (fract(r) < 0.5) ? (int)r - 1 : (int)r;
         row_max = clamp(row_min + 1, 0, height - 1);
         row_min = clamp(row_min, 0, height - 1);
-#else   
+#else
         col_min = clamp((int)floor(c), 0, width - 1);
         col_max = clamp((int)ceil(c), 0, width - 1);
         row_min = clamp((int)floor(r), 0, height - 1);

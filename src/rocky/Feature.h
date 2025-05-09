@@ -18,7 +18,7 @@ namespace ROCKY_NAMESPACE
     /**
     * Geometric shape data.
     * This class holds one or more lists of points. How these points are interpreted
-    * depends on the geometry Type. 
+    * depends on the geometry Type.
     */
     struct ROCKY_EXPORT Geometry
     {
@@ -68,7 +68,7 @@ namespace ROCKY_NAMESPACE
         //! Move constructor
         Geometry(Geometry&& rhs) noexcept = default;
         Geometry& operator=(Geometry&& rhs) noexcept = default;
-        
+
         //! Contruct a typed geometry by copying points from an existing range
         //! @param type Geometry type
         //! @param begin Beginning iterator in range
@@ -261,6 +261,7 @@ namespace ROCKY_NAMESPACE
         {
         public:
             struct implementation {
+                virtual ~implementation() = default;
                 virtual bool hasMore() const = 0;
                 virtual const Feature& next() = 0;
             };

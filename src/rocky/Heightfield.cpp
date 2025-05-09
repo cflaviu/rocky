@@ -262,6 +262,8 @@ Heightfield::heightAtPixel(
         result = (float)((n.x * (c - v0.x) + n.y * (r - v0.y)) / -n.z + v0.z);
         break;
     }
+    default:
+        break;
     }
 
     return result;

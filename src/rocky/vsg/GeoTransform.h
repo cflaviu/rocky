@@ -29,7 +29,7 @@ namespace ROCKY_NAMESPACE
         GeoTransform() = default;
 
         //! Call this is you change position directly.
-        void dirty();
+        void dirty() override;
 
         //! Same as changing position and calling dirty().
         void setPosition(const GeoPoint& p);
