@@ -362,6 +362,8 @@ namespace
                 }
             }
             break;
+        default:
+            break;
         }
     }
 

@@ -306,8 +306,8 @@ namespace ROCKY_NAMESPACE
                 _buffer.clear();
                 _buffer.resize(newSize);
                 _size = newSize;
-                _readIndex = { 0 };
-                _writeIndex = { 0 };
+                _readIndex = {};
+                _writeIndex = {};
             }
 
             bool push(const T& obj) {

@@ -100,4 +100,8 @@ namespace vsgImGui
 
 } // namespace vsgImGui
 
-EVSG_type_name(vsgImGui::RenderImGui);
+namespace vsg
+{
+VSG_type_name(vsgImGui::RenderImGui);
+}
+
