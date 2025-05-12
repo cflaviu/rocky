@@ -97,7 +97,7 @@ if (BUILD_WITH_ZLIB)
     find_package(ZLIB REQUIRED)
     if (ZLIB_FOUND)
         set(ROCKY_HAS_ZLIB TRUE)
-    endif()        
+    endif()
 endif()
 
 # dear imgui
@@ -106,7 +106,7 @@ if (BUILD_WITH_IMGUI)
     if(ImGui_FOUND)
         set(IMGUI_FOUND TRUE)
         set(ROCKY_HAS_IMGUI TRUE)
-    endif()            
+    endif()
 endif()
 
 # pthreads - for linux
@@ -121,7 +121,7 @@ endif()
 set(PUBLIC_LIBS glm::glm spdlog::spdlog)
 
 set(PRIVATE_LIBS PROJ::proj)
-    
+
 if(GDAL_FOUND)
     if (EXISTS "${GDAL_INCLUDE_DIR}/ogr_geocoding.h")
         set(ROCKY_HAS_GEOCODER TRUE) # Version.h.in
@@ -174,10 +174,10 @@ endif()
 if(ROCKY_RENDERER_VSG)
     file(GLOB HEADERS_VSG vsg/*.h)
     file(GLOB SOURCES_VSG vsg/*.cpp)
-    
+
     file(GLOB HEADERS_VSG_TERRAIN vsg/terrain/*.h)
     file(GLOB SOURCES_VSG_TERRAIN vsg/terrain/*.cpp)
-    
+
     file(GLOB HEADERS_VSG_ECS vsg/ecs/*.h)
     file(GLOB SOURCES_VSG_ECS vsg/ecs/*.cpp)
 
@@ -185,13 +185,13 @@ if(ROCKY_RENDERER_VSG)
         file(GLOB HEADERS_VSG_IMGUI vsg/imgui/*.h)
         file(GLOB SOURCES_VSG_IMGUI vsg/imgui/*.cpp)
     endif()
-    
+
     file(GLOB SHADERS_VSG vsg/shaders/*)
 
     find_package(vsg CONFIG REQUIRED)
     find_package(EnTT CONFIG REQUIRED)
     list(APPEND PUBLIC_LIBS EnTT::EnTT vsg::vsg)
-    
+
     set(ROCKY_HAS_VSG TRUE)
     set(ROCKY_HAS_ENTT TRUE)
 
@@ -199,10 +199,11 @@ if(ROCKY_RENDERER_VSG)
     if (vsgXchange_FOUND)
          list(APPEND PRIVATE_LIBS vsgXchange::vsgXchange)
          set(ROCKY_HAS_VSGXCHANGE TRUE)
+         message(WARNING "ROCKY_HAS_VSGXCHANGE")
     endif()
-    
+
     set(ROCKY_MAX_NUMBER_OF_VIEWS "4" CACHE STRING "Maximum number of VSG views to support")
-    
+
     # validate ROCKY_MAX_NUMBER_OF_VIEWS
     if(NOT ROCKY_MAX_NUMBER_OF_VIEWS MATCHES "^[0-9]+$")
         message(FATAL_ERROR "Nice try. ROCKY_MAX_NUMBER_OF_VIEWS must be an integer.")
@@ -229,7 +230,7 @@ endif()
 
 add_library(rocky ${BUILD_TYPE}
     ${HEADERS_CORE} ${SOURCES_CORE}
-    ${HEADERS_CONTRIB} ${SOURCES_CONTRIB}    
+    ${HEADERS_CONTRIB} ${SOURCES_CONTRIB}
     ${HEADERS_VSG} ${SOURCES_VSG}
     ${HEADERS_VSG_TERRAIN} ${SOURCES_VSG_TERRAIN}
     ${HEADERS_VSG_ECS} ${SOURCES_VSG_ECS}
@@ -266,7 +267,7 @@ assign_source_groups("Shaders" "${CMAKE_CURRENT_SOURCE_DIR}" ${SHADERS_VSG})
 # sets up versions and position independent code that is required for unix platforms
 set_property(TARGET rocky PROPERTY SOVERSION ${ROCKY_SOVERSION})
 set_property(TARGET rocky PROPERTY POSITION_INDEPENDENT_CODE ON)
-set_property(TARGET rocky PROPERTY CXX_STANDARD 17)
+set_property(TARGET rocky PROPERTY CXX_STANDARD 20)
 
 target_link_libraries(rocky ${LIBRARIES})
 

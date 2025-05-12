@@ -155,9 +155,9 @@ namespace
                         to_try = "+proj=longlat +R=1737400 +no_defs +type=crs";
 
                     // if it's a PROJ string, be sure to add the +type=crs
-                    if (contains(ndef, "+proj"))
+                    if (::contains(ndef, "+proj"))
                     {
-                        if (!contains(ndef, "proj=pipeline") && !contains(ndef, "type=crs"))
+                        if (!::contains(ndef, "proj=pipeline") && !::contains(ndef, "type=crs"))
                         {
                             to_try += " +type=crs";
                         }
@@ -267,20 +267,20 @@ namespace
 
                     else if (new_entry.horiz_crs_type != PJ_TYPE_GEOCENTRIC_CRS)
                     {
-                        if (contains(new_entry.proj, "proj=utm"))
+                        if (::contains(new_entry.proj, "proj=utm"))
                         {
-                            if (contains(new_entry.proj, "+south"))
+                            if (::contains(new_entry.proj, "+south"))
                                 new_entry.bounds = Box(166000, 1116915, 834000, 10000000);
                             else
                                 new_entry.bounds = Box(166000, 0, 834000, 9330000);
                         }
 
-                        else if (contains(new_entry.proj, "proj=merc"))
+                        else if (::contains(new_entry.proj, "proj=merc"))
                         {
                             new_entry.bounds = Box(-20037508.34278925, -20037508.34278925, 20037508.34278925, 20037508.34278925);
                         }
 
-                        else if (contains(new_entry.proj, "proj=qsc"))
+                        else if (::contains(new_entry.proj, "proj=qsc"))
                         {
                             // maximum possible values, I think
                             new_entry.bounds = Box(
@@ -1000,7 +1000,7 @@ SRSOperation::transformBoundsToMBR(
     v[ptr++] = glm::dvec3(input.xmax, input.ymax, 0); // ur
     v[ptr++] = glm::dvec3(input.xmax, input.ymin, 0); // lr
 
-    // We also sample along the edges of the bounding box and include them in the 
+    // We also sample along the edges of the bounding box and include them in the
     // MBR computation in case you are dealing with a projection that will cause the edges
     // of the bounding box to be expanded.  This was first noticed when dealing with converting
     // Hotline Oblique Mercator to WGS84
