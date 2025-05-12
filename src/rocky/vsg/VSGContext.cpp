@@ -183,8 +183,8 @@ namespace
         options->paths = searchPaths;
         auto found = vsg::findFile(vsg::Path("shaders/rocky.terrain.vert"), options);
         return !found.empty();
-    }    
-    
+    }
+
     /**
     * An update operation that maintains a priroity queue for update tasks.
     * This sits in the VSG viewer's update operations queue indefinitely
@@ -231,7 +231,7 @@ namespace
                         task = _queue.back();
                         _queue.pop_back();
 
-                        // check for cancelation - if the task is already canceled, 
+                        // check for cancelation - if the task is already canceled,
                         // discard it and fetch the next one.
                         auto po = dynamic_cast<Cancelable*>(task.function.get());
                         if (po == nullptr || !po->canceled())
@@ -338,9 +338,13 @@ VSGContextImpl::ctor(int& argc, char** argv)
 #endif
 
     // For system fonts
+#ifdef WIN32
     readerWriterOptions->paths.push_back("C:/windows/fonts");
+#else
     readerWriterOptions->paths.push_back("/etc/fonts");
     readerWriterOptions->paths.push_back("/usr/local/share/rocky/data");
+    readerWriterOptions->paths.push_back("/usr/local/share/rocky/data/fonts");
+#endif
 
     // Load a default font if there is one
     auto font_file = util::getEnvVar("ROCKY_DEFAULT_FONT");
