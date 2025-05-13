@@ -199,7 +199,6 @@ if(ROCKY_RENDERER_VSG)
     if (vsgXchange_FOUND)
          list(APPEND PRIVATE_LIBS vsgXchange::vsgXchange)
          set(ROCKY_HAS_VSGXCHANGE TRUE)
-         message(WARNING "ROCKY_HAS_VSGXCHANGE")
     endif()
 
     set(ROCKY_MAX_NUMBER_OF_VIEWS "4" CACHE STRING "Maximum number of VSG views to support")
